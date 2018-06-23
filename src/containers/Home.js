@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PageHeader, ListGroup } from 'react-bootstrap';
-import { API } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import './Home.css';
 
 export default class Home extends Component {
@@ -29,12 +29,16 @@ export default class Home extends Component {
 	}
 
 	testApiCall() {
-		return API.get('testApiCall', '/hello');
+		const queryHelloWorld = `query Query {
+		  helloWorld
+		}`;
+
+		return API.graphql(graphqlOperation(queryHelloWorld));
 	}
 
 	renderTestAPI(testApiCall) {
 		console.log(testApiCall);
-		return testApiCall.message;
+		return testApiCall.data.helloWorld;
 	}
 
 	renderLander() {
